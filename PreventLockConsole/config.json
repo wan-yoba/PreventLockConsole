@@ -1,0 +1,13 @@
+{
+  "Enabled": true,
+  "MoveIntervalSeconds": 20,
+  "IdleToStartSeconds": 30,
+  "CheckIntervalMilliseconds": 1000,
+  "StartInTray": true,
+  "UseExecutionState": false,
+  "Hotkeys": {
+    "TogglePause": "Ctrl+Alt+P",
+    "ToggleEnable": "Ctrl+Alt+E",
+    "Exit": "Ctrl+Alt+Q"
+  }
+}
