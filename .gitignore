@@ -1,0 +1,112 @@
+﻿# ------------------------------
+# .gitignore for .NET / C# projects
+# Works for Visual Studio, Rider, VS Code, dotnet CLI
+# ------------------------------
+
+# Build results
+[Bb]in/
+[Oo]bj/
+artifacts/
+out/
+publish/
+
+# Rider / IntelliJ
+.idea/
+*.sln.iml
+*.iml
+
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# MSBuild generated files
+project.lock.json
+project.fragment.lock.json
+Generated\ Files/
+
+# Publish / deployment
+*.Publish.xml
+*.pubxml
+*.pubxml.user
+*.deployproj
+*.publishsettings
+
+# Test results
+TestResults/
+*.trx
+*.testsettings
+
+# Logs
+*.log
+logs/
+
+# Temporary / cache files
+*.tmp
+*.temp
+*.cache
+*_ReSharper.*
+_ReSharper.Caches/
+
+# User-secrets (local secrets)
+secrets.json
+secrets.*.json
+
+# Profiling / coverage
+*.psess
+*.vsp
+*.vspx
+*.coverage
+*.coveragexml
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# npm / node (if present in repo)
+node_modules/
+dist/
+
+# other binaries
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.cache
+*.log
+
+# Generated resource files / satellite assemblies
+*.resources
+*.resources.dll
+
+# dotnet tool folders
+.tool/
+.nuget/packages/
+
+# Rider and JetBrains caches (extras)
+.idea/
+*.idea/
+
+# GitHub Actions / CI caches (optional)
+.github/workflows/node_modules/
+
+# If you want to ignore local appsettings/development files, uncomment:
+# appsettings.Development.json
+# appsettings.Local.json
+
+# If you want to ignore the generated comment config (we write config.comment.json), uncomment:
+# config.comment.json
+
+# If you added the icon to Resources and want to ignore generated resource files (normally not necessary):
+# *.g.resources

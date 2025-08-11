@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>  <!-- 注意 -windows 后缀 -->
+        <UseWindowsForms>true</UseWindowsForms> <!-- 开启 Windows Forms 支持 -->
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- 把 preventlock.ico 嵌入到程序集里 -->
+        <EmbeddedResource Include="Resources\preventlock.ico" />
+    </ItemGroup>
+</Project>
