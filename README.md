@@ -116,9 +116,6 @@ dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true --self-contained 
 程序会在控制台输出启动信息、状态变化与每次模拟输入（含时间戳）。如果你希望隐藏控制台并把日志写入文件（例如 `app.log`），我可以帮你添加文件日志功能。
 
 # 许可证
+Apache License
 
-你可以自由修改并在内部使用这份代码。如果需要对外发布或商用，请根据公司政策选择合适的开源许可证并在仓库中添加 LICENSE 文件。
 
----
-
-如需我把 README 直接推送到你的项目（添加为 `README.md` 文档）或把 `config` 的热键解析改为可读字符串/添加文件日志/自动把 icon 嵌入 csproj，我可以直接在画布里更新代码并给出一步步的操作说明。
