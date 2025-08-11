@@ -1,0 +1,14 @@
+{
+  "TrayTooltip": "PreventLock (SendInput)",
+  "Language": "Language",
+  "English": "English",
+  "Chinese": "中文",
+  "TogglePause": "Toggle Pause",
+  "ToggleEnable": "Enable/Disable",
+  "ShowStatus": "Show Status",
+  "Exit": "Exit",
+  "Setting": "Setting",
+  "TrayStarted": "PreventLock started. Right-click the tray icon for options.",
+  "Commands": "Commands: P=TogglePause, E=ToggleEnable, Q=Quit, S=ShowStatus",
+  "Exiting": "Exiting..."
+}

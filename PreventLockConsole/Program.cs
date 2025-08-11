@@ -21,10 +21,21 @@ namespace PreventLockConsole
                 if (Console.KeyAvailable)
                 {
                     var key = Console.ReadKey(true);
-                    if (key.Key == ConsoleKey.P) app.TogglePause();
-                    else if (key.Key == ConsoleKey.E) app.ToggleEnable();
-                    else if (key.Key == ConsoleKey.Q) app.ExitApplication();
-                    else if (key.Key == ConsoleKey.S) app.ShowStatus();
+                    switch (key.Key)
+                    {
+                        case ConsoleKey.P:
+                            app.TogglePause();
+                            break;
+                        case ConsoleKey.E:
+                            app.ToggleEnable();
+                            break;
+                        case ConsoleKey.Q:
+                            app.ExitApplication();
+                            break;
+                        case ConsoleKey.S:
+                            app.ShowStatus();
+                            break;
+                    }
                 }
 
                 Thread.Sleep(150);

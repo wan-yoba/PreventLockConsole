@@ -1,3 +1,6 @@
+using System;
+using System.Windows.Forms;
+
 namespace PreventLockConsole
 {
     public class SettingsForm : Form
@@ -10,9 +13,9 @@ namespace PreventLockConsole
         public SettingsForm(Config cfg)
         {
             _cfg = cfg;
-            Text = "PreventLock Settings";
+            Text = $"PreventLock 设置";
             Width = 420;
-            Height = 360;
+            Height = 345;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
@@ -62,6 +65,12 @@ namespace PreventLockConsole
                 lblEnabled, cbEnabled, lblMove, nudMove, lblIdle, nudIdle, lblCheck, nudCheck, lblHot, tbPause,
                 tbEnable, tbExit, cbStartInTray, cbUseExec, btnOk, btnCancel
             });
+        }
+
+        public sealed override string Text
+        {
+            get { return base.Text; }
+            set { base.Text = value; }
         }
 
         private void Apply()

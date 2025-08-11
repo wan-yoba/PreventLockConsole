@@ -1,0 +1,14 @@
+{
+  "TrayTooltip": "PreventLock（SendInput）",
+  "Language": "语言",
+  "English": "English",
+  "Chinese": "中文",
+  "TogglePause": "切换暂停",
+  "ToggleEnable": "启用/禁用",
+  "ShowStatus": "显示状态",
+  "Exit": "退出",
+  "Setting": "配置",
+  "TrayStarted": "PreventLock 已启动。右键图标打开菜单。",
+  "Commands": "命令：P=切换暂停，E=切换启用，Q=退出，S=显示状态",
+  "Exiting": "退出..."
+}

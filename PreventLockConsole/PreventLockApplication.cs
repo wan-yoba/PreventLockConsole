@@ -14,6 +14,13 @@ namespace PreventLockConsole
 
         private MessageWindow? _messageWindow;
         private Form? _uiContextForm;
+        private ToolStripMenuItem? menuTogglePause;
+        private ToolStripMenuItem? menuSetting;
+        private ToolStripMenuItem? menuToggleEnable;
+        private ToolStripMenuItem? menuShowStatus;
+        private ToolStripMenuItem? menuExit;
+        private ToolStripMenuItem? menuLangEn;
+        private ToolStripMenuItem? menuLangZh;
 
         private bool _manualPaused = false;
         private bool _running = false;
@@ -35,12 +42,20 @@ namespace PreventLockConsole
             LoadOrCreateConfig();
             ParseHotkeys();
 
+            // load language resources based on config
+            Language.Load(_config.Language ?? "zh-CN");
+
             var uiStarted = new ManualResetEvent(false);
             _uiThread = new Thread(() =>
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
+                _uiContextForm = new Form()
+                {
+                    ShowInTaskbar = false, Size = new System.Drawing.Size(0, 0), FormBorderStyle = FormBorderStyle.None,
+                    StartPosition = FormStartPosition.Manual, Location = new System.Drawing.Point(-2000, -2000)
+                };
                 _uiContextForm = new Form()
                 {
                     ShowInTaskbar = false, Size = new System.Drawing.Size(0, 0), FormBorderStyle = FormBorderStyle.None,
@@ -91,15 +106,41 @@ namespace PreventLockConsole
                 _trayIcon.Text = "PreventLock（SendInput）";
                 _trayIcon.Visible = true;
 
+
                 var ctx = new ContextMenuStrip();
-                ctx.Items.Add("切换暂停 (Ctrl+Alt+P)", null, (s, e) => TogglePause());
-                ctx.Items.Add("启用/禁用 (Ctrl+Alt+E)", null, (s, e) => ToggleEnable());
-                ctx.Items.Add("设置", null, (s, e) => ShowSettingsForm());
+
+                // language submenu
+                var langMenu = new ToolStripMenuItem(Language.Get("Language"));
+                menuLangEn = new ToolStripMenuItem(Language.Get("English"))
+                {
+                    Checked = (_config.Language?.StartsWith("en", StringComparison.OrdinalIgnoreCase) == true)
+                };
+                menuLangZh = new ToolStripMenuItem(Language.Get("Chinese"))
+                {
+                    Checked = (_config.Language?.StartsWith("zh", StringComparison.OrdinalIgnoreCase) == true)
+                };
+                menuLangEn.Click += (s, e) => SwitchLanguage("en");
+                menuLangZh.Click += (s, e) => SwitchLanguage("zh-CN");
+                langMenu.DropDownItems.Add(menuLangEn);
+                langMenu.DropDownItems.Add(menuLangZh);
+
+                // main menu items (store references)
+                menuTogglePause = new ToolStripMenuItem(Language.Get("TogglePause"), null, (s, e) => TogglePause());
+                menuToggleEnable = new ToolStripMenuItem(Language.Get("ToggleEnable"), null, (s, e) => ToggleEnable());
+                menuShowStatus = new ToolStripMenuItem(Language.Get("ShowStatus"), null, (s, e) => ShowStatus());
+                menuExit = new ToolStripMenuItem(Language.Get("Exit"), null, (s, e) => ExitApplication());
+                menuSetting = new ToolStripMenuItem(Language.Get("Setting"), null, (s, e) => ShowSettingsForm());
+
+                ctx.Items.Add(menuTogglePause);
+                ctx.Items.Add(menuToggleEnable);
+                ctx.Items.Add(langMenu);
                 ctx.Items.Add(new ToolStripSeparator());
-                ctx.Items.Add("显示状态", null, (s, e) => ShowStatus());
-                ctx.Items.Add("退出 (Ctrl+Alt+Q)", null, (s, e) => ExitApplication());
+                ctx.Items.Add(menuShowStatus);
+                ctx.Items.Add(menuSetting);
+                ctx.Items.Add(menuExit);
 
                 _trayIcon.ContextMenuStrip = ctx;
+
                 _trayIcon.DoubleClick += (s, e) => ShowStatus();
 
                 try
@@ -203,6 +244,59 @@ namespace PreventLockConsole
             }
         }
 
+
+        private void SwitchLanguage(string langCode)
+        {
+            try
+            {
+                _config.Language = langCode;
+                SaveConfig();
+                Language.Load(langCode);
+
+                if (_uiContextForm != null && !_uiContextForm.IsDisposed)
+                {
+                    _uiContextForm.BeginInvoke(new Action(() => ApplyLanguageToUi()));
+                }
+                else
+                {
+                    ApplyLanguageToUi();
+                }
+
+                Console.WriteLine(Language.Get("TrayStarted"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("SwitchLanguage error: " + ex.Message);
+            }
+        }
+
+        private void ApplyLanguageToUi()
+        {
+            try
+            {
+                if (_trayIcon != null)
+                {
+                    _trayIcon.Text = Language.Get("TrayTooltip");
+                    if (menuTogglePause != null) menuTogglePause.Text = Language.Get("TogglePause");
+                    if (menuToggleEnable != null) menuToggleEnable.Text = Language.Get("ToggleEnable");
+                    if (menuShowStatus != null) menuShowStatus.Text = Language.Get("ShowStatus");
+                    if (menuExit != null) menuExit.Text = Language.Get("Exit");
+                    if (menuLangEn != null) menuLangEn.Text = Language.Get("English");
+                    if (menuLangZh != null) menuLangZh.Text = Language.Get("Chinese");
+
+                    if (menuLangEn != null)
+                        menuLangEn.Checked =
+                            Language.CurrentLanguage.StartsWith("en", StringComparison.OrdinalIgnoreCase);
+                    if (menuLangZh != null)
+                        menuLangZh.Checked =
+                            Language.CurrentLanguage.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            catch
+            {
+            }
+        }
+
         private void OnCheckTimer()
         {
             var idleSec = InputHelper.GetIdleSeconds();
@@ -229,7 +323,6 @@ namespace PreventLockConsole
             _moveTimer.Start();
             Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] 已开始模拟（空闲）。每 {_config.MoveIntervalSeconds} 秒触发一次。");
             Logger.Log("开始模拟，每 " + _config.MoveIntervalSeconds + "s");
-            //ShowTrayText("PreventLock: running");
             if (_config.UseExecutionState)
             {
                 InputHelper.ApplyExecutionState(true);
@@ -243,7 +336,6 @@ namespace PreventLockConsole
             _moveTimer.Stop();
             Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] 已停止模拟");
             Logger.Log("停止模拟");
-            //ShowTrayText("PreventLock: paused");
             if (_config.UseExecutionState)
             {
                 InputHelper.ApplyExecutionState(false);
